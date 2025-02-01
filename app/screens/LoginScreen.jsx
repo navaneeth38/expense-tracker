@@ -1,17 +1,30 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { View, TextInput, Button, Text, Pressable } from 'react-native';
 import { useDispatch } from 'react-redux';
-import { saveData, getData } from '../utils/storage';
+import {  getData, saveData } from '../utils/storage';
 
 const LoginScreen = ({ navigation }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const dispatch = useDispatch();
 
+  useEffect(() => {
+    const checkUserSession = async () => {
+      const storedUser = await getData('Session');
+      console.log(storedUser);
+      if (storedUser) {
+        dispatch({ type: 'LOGIN', payload: storedUser });
+        navigation.replace('Home'); 
+      }
+    };
+    checkUserSession();
+  }, []);
+
   const handleLogin = async () => {
     const storedUser = await getData('user');
     if (storedUser && storedUser.email === email && storedUser.password === password) {
       dispatch({ type: 'LOGIN', payload: storedUser });
+      saveData('Session',storedUser)
       navigation.navigate('Home');
     } else {
       alert('Invalid credentials');

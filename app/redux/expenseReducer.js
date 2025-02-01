@@ -1,4 +1,3 @@
-
 const initialState = {
     transactions: [],
   };
@@ -8,7 +7,10 @@ const initialState = {
       case 'ADD_EXPENSE':
         return { ...state, transactions: [...state.transactions, action.payload] };
       case 'DELETE_EXPENSE':
-        return { ...state, transactions: state.transactions.filter(tx => tx.id !== action.payload) };
+        return { 
+          ...state, 
+          transactions: state.transactions.filter(tx => tx.id !== action.payload) 
+        };
       default:
         return state;
     }
